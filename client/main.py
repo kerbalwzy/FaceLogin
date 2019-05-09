@@ -1,5 +1,6 @@
-import tkinter as tk
+from tkinter import Tk
 from menus import TopMenus
+from videoFrame import VideoFrame
 
 
 # from sys import platform
@@ -15,13 +16,15 @@ from menus import TopMenus
 #         info['CFBundleName'] = "ScreenMonitorClient"
 
 
-class ClientRootWindow(tk.Tk):
+class ClientRootWindow(Tk):
 
-    def mainloop(self, n=0):
+    def show(self):
         self.create_window()
+        self.update()
+        print("ClientRootWindow: {} X {}".format(self.winfo_width(), self.winfo_height()))
         TopMenus(master=self).show()
-
-        super().mainloop()
+        VideoFrame(master=self, bg="black").show()
+        self.mainloop()
 
     def create_window(self):
         # create the root window and make it center
@@ -36,7 +39,7 @@ class ClientRootWindow(tk.Tk):
         # self.resizable(width=False, height=False) # 禁止调整窗口大小
 
 
-
 if __name__ == '__main__':
     client = ClientRootWindow()
-    client.mainloop()
+    # client.mainloop()
+    client.show()

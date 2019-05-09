@@ -1,14 +1,14 @@
-import tkinter as tk
+from tkinter import Menu
 
 
 def test_func():
     print("this is test func")
 
 
-class TopMenus(tk.Menu):
+class TopMenus(Menu):
 
     def add_setting_menus(self):
-        setting_menu = tk.Menu(master=self, tearoff=0)
+        setting_menu = Menu(master=self, tearoff=0)
         self.add_cascade(label="设置", menu=setting_menu)
         setting_menu.add_command(label="屏幕广播模式", command=test_func)
         setting_menu.add_command(label="简单录屏模式", command=test_func)
