@@ -19,6 +19,23 @@ class SingleInstance:
         return cls.__instance
 
 
+def single_instance(cls):
+    """
+    通过装饰器的实现任何类的单例模式
+    """
+    __instance = dict()
+    __instance_lock = ThreadLock()
+
+    def _single_instance(*args, **kwargs):
+        if cls not in __instance:
+            with __instance_lock:
+                if cls not in __instance:
+                    __instance[cls] = cls(*args, **kwargs)
+        return __instance[cls]
+
+    return _single_instance
+
+
 if __name__ == '__main__':
     import threading
 
