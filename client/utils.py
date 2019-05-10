@@ -1,27 +1,9 @@
 from threading import Lock as ThreadLock
-import time
-
-
-class SingleInstance:
-    """
-    作为一个用来实现单例的父类使用，
-    当有一个类继承「包含多继承」于这个类时，这个类创建的实例对象必定符合单例模式。
-    并且是线程安全的单例模式
-    """
-
-    __instance_lock = ThreadLock()
-
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(cls, "__instance"):
-            with cls.__instance_lock:
-                if not hasattr(cls, "__instance"):
-                    cls.__instance = object.__new__(cls)
-        return cls.__instance
 
 
 def single_instance(cls):
     """
-    通过装饰器的实现任何类的单例模式
+    通过装饰器的实现任何类的单例模式，并且通过线程锁，实现了单例模式的线程安全
     """
     __instance = dict()
     __instance_lock = ThreadLock()
@@ -38,6 +20,7 @@ def single_instance(cls):
 
 if __name__ == '__main__':
     import threading
+    import time
 
 
     def task(cls, *args, **kwargs):
@@ -45,12 +28,32 @@ if __name__ == '__main__':
         print(instance)
 
 
-    for i in range(5):
-        t = threading.Thread(target=task, args=(SingleInstance,))
-        t.start()
+    def test_single_decorator(cls, *args, **kwargs):
+        print("+++++++++++++++++++++++++")
+        args = cls, *args
+        for i in range(5):
+            t = threading.Thread(target=task, args=args, kwargs=kwargs)
+            t.start()
+        time.sleep(3)
+        obj = cls()
+        print(obj)
+        print("==========================")
 
-    import time
 
-    time.sleep(5)
-    obj = SingleInstance()
-    print(obj)
+    @single_instance
+    class Test001:
+        pass
+
+
+    @single_instance
+    class Test002:
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+        def __str__(self):
+            return super().__str__() + self.name
+
+
+    test_single_decorator(Test001)
+    test_single_decorator(Test002, name="小王", age=19)
