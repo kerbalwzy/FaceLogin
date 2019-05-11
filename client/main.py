@@ -2,6 +2,8 @@ from tkinter import Tk
 from menus import TopMenus
 from videoFrame import VideoFrame
 
+from utils import single_instance
+
 
 # from sys import platform
 # # change default 'python' menu
@@ -15,28 +17,29 @@ from videoFrame import VideoFrame
 #         info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
 #         info['CFBundleName'] = "ScreenMonitorClient"
 
-
+@single_instance
 class ClientRootWindow(Tk):
 
     def show(self):
         self.create_window()
         self.update()
-        print("ClientRootWindow: {} X {}".format(self.winfo_width(), self.winfo_height()))
+        VideoFrame(master=self,
+                   bg="black").show()
+
         TopMenus(master=self).show()
-        VideoFrame(master=self, bg="black").show()
         self.mainloop()
 
     def create_window(self):
         # create the root window and make it center
         self.wm_title("ScreenMonitorClient")
 
-        screen_w, screen_h = self.maxsize()
-        w = int(screen_w * 0.618)
-        h = int(screen_h * 0.618)
-        m_w = int((screen_w - w) / 2)
-        m_h = int((screen_h - h) / 2)
+        self.screen_w, self.screen_h = self.maxsize()
+        w = int(self.screen_w * 0.618)
+        h = int(self.screen_h * 0.618)
+        m_w = int((self.screen_w - w) / 2)
+        m_h = int((self.screen_h - h) / 2)
         self.geometry("{}x{}+{}+{}".format(w, h, m_w, m_h))
-        # self.resizable(width=False, height=False) # 禁止调整窗口大小
+        self.resizable(width=False, height=False)  # 禁止调整窗口大小
 
 
 if __name__ == '__main__':
