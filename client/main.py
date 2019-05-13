@@ -23,11 +23,8 @@ class ClientRootWindow(Tk):
     def show(self):
         self.create_window()
         self.update()
-        VideoFrame(master=self,
-                   bg="black").show()
-
+        VideoFrame(master=self, bg="black").show()
         TopMenus(master=self).show()
-        self.mainloop()
 
     def create_window(self):
         # create the root window and make it center
@@ -46,3 +43,4 @@ if __name__ == '__main__':
     client = ClientRootWindow()
     # client.mainloop()
     client.show()
+    client.mainloop()

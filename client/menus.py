@@ -1,4 +1,5 @@
 from tkinter import Menu
+from videoFrame import VideoFrame
 
 
 def test_func():
@@ -10,7 +11,7 @@ class TopMenus(Menu):
     def add_setting_menus(self):
         setting_menu = Menu(master=self, tearoff=0)
         self.add_cascade(label="功能", menu=setting_menu)
-        setting_menu.add_command(label="开启预览", command=test_func)
+        setting_menu.add_command(label="开启预览", command=VideoFrame().start_preview)
         setting_menu.add_command(label="关闭预览", command=test_func)
         setting_menu.add_separator()
         setting_menu.add_command(label="开启传输", command=test_func, state="disable")

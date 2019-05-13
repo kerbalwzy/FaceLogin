@@ -20,10 +20,6 @@ class VideoFrame(Frame):
         self.panel.pack()
         self.pack(side=TOP, expand=YES, fill=BOTH)
 
-        t = threading.Thread(target=self.open_preview)
-        t.daemon = True
-        t.start()
-
     def resize_img(self, image):
         # 对一个pil_image对象进行缩放，让它在一个矩形框内，还能保持比例
 
@@ -45,23 +41,22 @@ class VideoFrame(Frame):
         cover_image = ImageTk.PhotoImage(image)
         return cover_image
 
-    def open_preview(self):
-        # TODO， this have BUG
-        """
-        if I did not move the mouse actively,
-        It would not take a screenshot, which seemed to cause a blockage.
-        """
+    def start_preview(self):
+        t = threading.Thread(target=self.preview)
+        t.setDaemon(True)
+        t.start()
+
+    def preview(self):
         with mss() as sct:
-            while True:
-                s = time.time()
-                monitor = {"top": 0, "left": 0,
-                           "width": self.master.screen_w,
-                           "height": self.master.screen_h}
-                sct_img = sct.grab(monitor)
-                screen_img = Image.frombytes('RGB', sct_img.size, sct_img.rgb)
-                e = time.time()
-                print(e - s)
-                screen_img = self.resize_img(screen_img)
-                img = ImageTk.PhotoImage(screen_img)
-                self.panel.config(image=img)
-                self.panel.image = img
+            s = time.time()
+            monitor = {"top": 0, "left": 0,
+                       "width": self.master.screen_w,
+                       "height": self.master.screen_h}
+            sct_img = sct.grab(monitor)
+            screen_img = Image.frombytes('RGB', sct_img.size, sct_img.rgb)
+            e = time.time()
+            print(e - s)
+            screen_img = self.resize_img(screen_img)
+            img = ImageTk.PhotoImage(screen_img)
+            self.panel.config(image=img)
+            self.panel.image = img
