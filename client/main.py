@@ -23,8 +23,11 @@ class ClientRootWindow(Tk):
     def show(self):
         self.create_window()
         self.update()
-        VideoFrame(master=self, bg="black").show()
-        TopMenus(master=self).show()
+
+        self.video_frame.show()
+        self.top_menus.show()
+
+        self.mainloop()
 
     def create_window(self):
         # create the root window and make it center
@@ -38,9 +41,10 @@ class ClientRootWindow(Tk):
         self.geometry("{}x{}+{}+{}".format(w, h, m_w, m_h))
         self.resizable(width=False, height=False)  # 禁止调整窗口大小
 
+        self.video_frame = VideoFrame(master=self, bg="black")
+        self.top_menus = TopMenus(master=self)
+
 
 if __name__ == '__main__':
     client = ClientRootWindow()
-    # client.mainloop()
     client.show()
-    client.mainloop()

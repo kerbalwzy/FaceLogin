@@ -1,18 +1,22 @@
 from tkinter import Menu
 from videoFrame import VideoFrame
+from utils import single_instance
 
 
 def test_func():
     print("this is test func")
 
 
+@single_instance
 class TopMenus(Menu):
 
     def add_setting_menus(self):
         setting_menu = Menu(master=self, tearoff=0)
         self.add_cascade(label="功能", menu=setting_menu)
-        setting_menu.add_command(label="开启预览", command=VideoFrame().start_preview)
-        setting_menu.add_command(label="关闭预览", command=test_func)
+        setting_menu.add_command(label="开启预览",
+                                 command=self.master.video_frame.start_preview)
+        setting_menu.add_command(label="关闭预览",
+                                 command=self.master.video_frame.stop_preview)
         setting_menu.add_separator()
         setting_menu.add_command(label="开启传输", command=test_func, state="disable")
         setting_menu.add_command(label="关闭传输", command=test_func, state="disable")
