@@ -1,7 +1,7 @@
 from tkinter import Tk
+
 from menus import TopMenus
 from videoFrame import VideoFrame
-
 from utils import single_instance
 
 
